@@ -1,8 +1,10 @@
-version: '3.7'
+version: '3.8'
 services:
   elasticsearch:
-      container_name: elastic
+      container_name: elastic-ts
       build: "es"
+      networks:
+        - esnet
       volumes:
         - ./es/data:/tmp
       ports:
@@ -11,10 +13,14 @@ services:
         discovery.type: single-node
 
   kibana:
-      container_name: kibana
+      container_name: kibana-ts
       image: kibana:7.7.1
+      networks:
+        - esnet
       links:
         - elasticsearch
       ports:
         - 5601:5601
 
+networks:
+  esnet:
